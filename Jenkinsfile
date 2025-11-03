@@ -31,5 +31,10 @@ pipeline {
 //              sh 'mvn clean install sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.analysis.mode=publish'
 //          }
 //     }
+        stage('Deploy') {
+    steps {
+        sh 'nohup java -jar target/java-webapp-1.0.jar &'
+    }
+}
     }
 }
