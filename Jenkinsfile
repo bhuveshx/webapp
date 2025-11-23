@@ -2,10 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Deploy') {
             steps {
-                // 'deploy' uploads to the repo defined in distributionManagement
-                bat 'mvn -B -DskipTests clean deploy'
+                // 1. Kill any old running app (ignore error if none running)
+                bat 'taskkill /F /IM java.exe || exit 0'
+                
+                // 2. Start new app and tell Jenkins NOT to kill it
+                withEnv(['JENKINS_NODE_COOKIE=dontKillMe']) {
+                     bat 'start /B java -jar target/java-webapp-1.0.jar'
+                }
             }
         }
 
