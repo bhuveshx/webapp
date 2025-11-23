@@ -5,7 +5,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+            // 'deploy' uploads to the repo defined in distributionManagement
+            sh 'mvn -B -DskipTests clean deploy'
             }
         }
 //         stage('Sonar-Report') {
