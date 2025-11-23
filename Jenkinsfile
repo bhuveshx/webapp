@@ -14,11 +14,9 @@ pipeline {
 
         stage('Sonar-Report') {
             steps {
-                // 3. Run SonarQube Analysis
-                // Ensure your SonarQube server is running on localhost:9000 first!
-                bat 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin'
+                     bat 'mvn sonar:sonar -Dsonar.host.url=http://127.0.0.1:9000 -Dsonar.login=admin -Dsonar.password=admin'
             }
-        }
+        }    
 
         stage('Test') {
             steps {
