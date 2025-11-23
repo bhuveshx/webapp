@@ -90,5 +90,11 @@
       </plugin>
     </plugins>
   </build>
-
+ <distributionManagement>
+    <repository>
+      <id>upes</id>
+      <name>UPES Release Repository</name>
+      <url>http://192.168.1.13:8081/nexus/content/repositories/upes/</url>
+    </repository>
+  </distributionManagement>
 </project>
