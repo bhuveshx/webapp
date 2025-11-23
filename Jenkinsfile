@@ -8,7 +8,12 @@ pipeline {
                 bat 'mvn -B -DskipTests clean deploy'
             }
         }
-
+        stage('Sonar-Report') {
+        steps {
+            // Scans code and sends report to localhost:9000
+            bat 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin'
+        }
+        }
         stage('Test') {
             steps {
                 // Runs unit tests
