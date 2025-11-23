@@ -4,19 +4,24 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // Compiles the code and uploads to Nexus
+                // 1. STOP OLD APP FIRST: Frees the JAR file so Maven can delete it
+                bat 'taskkill /F /IM java.exe || exit 0'
+                
+                // 2. Build and Upload to Nexus
                 bat 'mvn -B -DskipTests clean deploy'
             }
         }
+
         stage('Sonar-Report') {
-        steps {
-            // Scans code and sends report to localhost:9000
-            bat 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin'
+            steps {
+                // 3. Run SonarQube Analysis
+                // Ensure your SonarQube server is running on localhost:9000 first!
+                bat 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin'
+            }
         }
-        }
+
         stage('Test') {
             steps {
-                // Runs unit tests
                 bat 'mvn test'
             }
             post {
@@ -28,10 +33,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // 1. Kill any old running app (ignore error if none running)
-                bat 'taskkill /F /IM java.exe || exit 0'
-                
-                // 2. Start new app and tell Jenkins NOT to kill it
+                // 4. Start the new version and keep it running
                 withEnv(['JENKINS_NODE_COOKIE=dontKillMe']) {
                      bat 'start /B java -jar target/java-webapp-1.0.jar'
                 }
